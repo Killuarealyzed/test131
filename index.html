@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>НОМЕРНОЙ — крути номера, собирай империю</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>▣</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;800&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="shell">
+
+<header class="top">
+  <div class="brand"><div class="brand-mark">▣</div><div class="brand-name">НОМЕРНОЙ <em>/ магнат</em></div></div>
+  <div class="top-right">
+    <div class="chip player" id="playerChip" title="Профиль"><span class="dot"></span><b id="playerName">—</b></div>
+    <div class="chip" id="prestigeChip" title="Престиж">⭐ <b id="prestigeVal">0</b></div>
+    <div class="chip money"><span class="dot"></span><span id="moneyVal">0</span>&nbsp;₽ <span class="sm" id="incomeChip"></span></div>
+    <div class="chip lvl"><span class="dot"></span>Ур. <b id="lvlVal">1</b> <span class="sm" id="xpChip">0/150</span></div>
+    <div class="chip rank"><span class="dot"></span>#<b id="rankVal">—</b> <span class="sm">рейтинг</span></div>
+    <button class="icon-btn" id="notifBell" title="Уведомления">🔔<span class="badge" id="notifCount" style="display:none">0</span></button>
+    <button class="icon-btn" id="statsBtn" title="Статистика">◧</button>
+    <button class="icon-btn" id="sndBtn" title="Звук">♪</button>
+    <button class="icon-btn" id="logoutBtn" title="Выйти">⎋</button>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="spin" class="active">Крутка</button>
+  <button data-tab="cases">Кейсы</button>
+  <button data-tab="garage">Техника</button>
+  <button data-tab="business">Бизнес</button>
+  <button data-tab="mybusiness">Мои бизнесы</button>
+  <button data-tab="trade">Трейд</button>
+  <button data-tab="auction">Аукцион <span class="badge" id="aucBadge" style="display:none">0</span></button>
+  <button data-tab="property">Квартиры</button>
+  <button data-tab="prestige">Престиж</button>
+  <button data-tab="rating">Рейтинг</button>
+  <button data-tab="wheel">Колесо</button>
+  <button data-tab="inv">Инвентарь <span class="badge" id="invBadge">0</span></button>
+</nav>
+
+<main>
+  <section id="tab-spin" class="tab active">
+    <div class="sect-head"><div><h2>Крутка номеров</h2><p>Крутим полный номер: буквы + цифры + регион. Доход растёт от престижа.</p></div></div>
+    <div class="spin-layout">
+      <div class="spin-main">
+        <div class="panel machine">
+          <div class="machine-head"><span class="tag">LIVE</span> Автомат «НОМЕР-777»</div>
+          <div class="machine-sub" id="spinDiscLabel">Полная крутка номера</div>
+          <div class="stage" id="stage">
+            <div class="pw xl" id="stageWrap">
+              <div class="plate"><div class="pm" id="slotMain"></div><div class="pr"><span class="region-slot" id="slotRegion">—</span><span>RUS</span></div></div>
+            </div>
+          </div>
+          <div class="result-zone empty" id="resultZone"><span style="color:var(--muted);font-size:12.5px">Нажми «Крутить», чтобы выбить номер ↓</span></div>
+          <div class="divider"></div>
+          <div class="spin-btns">
+            <button class="btn btn-primary btn-big" id="spin1">×1 — <span id="spin1Cost">2500</span> ₽</button>
+            <button class="btn btn-primary btn-big" id="spin5">×5 — <span id="spin5Cost">12500</span> ₽</button>
+            <button class="btn btn-gold btn-big" id="spin10">×10 — <span id="spin10Cost">25000</span> ₽</button>
+          </div>
+          <div class="spin-extra">
+            <span class="chip">🎁 Бесплатных круток: <b id="freeSpinsCount">0</b></span>
+            <button class="btn btn-sm" id="jobBtn">💼 Подработать +<span id="jobAmount">2000</span> ₽</button>
+          </div>
+        </div>
+      </div>
+      <aside class="spin-side">
+        <div class="panel side-panel"><h4>Шансы редкости</h4><div id="oddsBox"></div></div>
+        <div class="panel side-panel best-box"><h4>Лучший номер</h4><div id="bestBox" style="color:var(--muted);font-size:12px">пока пусто…</div></div>
+        <div class="panel side-panel"><h4>История</h4><div class="hist-list" id="histBox"><span style="color:var(--muted);font-size:11.5px">крутни первый номер!</span></div></div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="tab-cases" class="tab">
+    <div class="sect-head"><div><h2>Кейсы с номерами</h2><p>В кейсах шанс редких номеров выше. Открываются по уровню.</p></div></div>
+    <div class="cases-grid" id="casesGrid"></div>
+  </section>
+
+  <section id="tab-garage" class="tab">
+    <div class="sect-head"><div><h2>Техника</h2><p>Машины, самолёты, яхты и ракеты. Прокачка бесконечная.</p></div></div>
+    <div class="inv-tools">
+      <div class="chips-row" id="garageCats"></div>
+      <div id="garageCount" class="inv-summary" style="margin:0"></div>
+    </div>
+    <div class="garage-grid" id="garageGrid"></div>
+  </section>
+
+  <section id="tab-business" class="tab">
+    <div class="sect-head"><div><h2>Бизнес</h2><p>Все бизнесы государственные 🏛️. Выкупай на аукционе — ставки делают только игроки. Чем дороже бизнес, тем дольше аукцион.</p></div></div>
+    <div class="biz-grid" id="bizGrid"></div>
+  </section>
+
+  <section id="tab-mybusiness" class="tab">
+    <div class="sect-head"><div><h2>Мои бизнесы</h2><p>Твои выкупленные бизнесы. Следи за запасом продуктов, закупай и продавай.</p></div></div>
+    <div id="myBizGrid"></div>
+  </section>
+
+  <section id="tab-trade" class="tab">
+    <div class="sect-head"><div><h2>Трейд</h2><p>Обменивайся номерами и деньгами с другими игроками. Создай трейд или ответь на входящий.</p></div></div>
+    <div id="tradeBox"></div>
+  </section>
+
+  <section id="tab-auction" class="tab">
+    <div class="sect-head"><div><h2>Аукцион номеров</h2><p>Выставляй свои номера на торги или борись за чужие. Продавец задаёт минимальную цену и время — кто предложит больше, забирает номер.</p></div></div>
+    <div id="auctionBox"></div>
+  </section>
+
+  <section id="tab-property" class="tab">
+    <div class="sect-head"><div><h2>Квартиры и недвижимость</h2><p>Покупай жильё — оно даёт пассивный доход. Можно продать за 70%.</p></div></div>
+    <div class="biz-grid" id="propGrid"></div>
+  </section>
+
+  <section id="tab-prestige" class="tab">
+    <div class="sect-head"><div><h2>Престиж</h2><p>Престиж НЕ сбрасывает прогресс. Нужны жёсткие условия: мифический номер, деньги и дорогая машина.</p></div></div>
+    <div id="prestigeBox"></div>
+  </section>
+
+  <section id="tab-rating" class="tab">
+    <div class="sect-head"><div><h2>Рейтинг магнатов</h2><p>Все игроки устройства. Переключение между игроками — только через выход и вход по паролю.</p></div>
+      <button class="btn btn-primary" id="newPlayerBtn">+ Новый игрок</button></div>
+    <div class="panel" style="padding:0;overflow:hidden">
+      <table class="rating-table"><thead><tr><th>#</th><th>Игрок</th><th>⭐</th><th>Ур.</th><th>Техника</th><th>Бизнесы</th><th>Квартиры</th><th>Состояние</th><th></th></tr></thead>
+      <tbody id="ratingBody"></tbody></table>
+    </div>
+  </section>
+
+  <section id="tab-wheel" class="tab">
+    <div class="sect-head"><div><h2>Колесо фортуны</h2><p>Одна бесплатная прокрутка каждые 24 часа.</p></div></div>
+    <div class="wheel-wrap">
+      <div class="wheel-stage">
+        <div class="wheel-pointer"></div>
+        <svg class="wheel-svg" id="wheelSvg" viewBox="0 0 400 400"></svg>
+        <button class="wheel-center-btn" id="wheelSpinBtn">КРУТИТЬ<span class="timer" id="wheelTimer">готово</span></button>
+      </div>
+      <div class="wheel-info"><h3>Что можно выиграть</h3><p>Призы: деньги, крутки, номера, буст дохода.</p>
+        <div class="wheel-prizes" id="wheelPrizes"></div></div>
+    </div>
+  </section>
+
+  <section id="tab-inv" class="tab">
+    <div class="sect-head"><div><h2>Инвентарь</h2><p>Продавай номера или храни коллекцию. Вместимость растёт от бизнесов.</p></div></div>
+    <div class="inv-tools">
+      <div class="chips-row" id="invChips"></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-sm" id="invSortBtn">Сначала дорогие</button>
+        <button class="btn btn-sm btn-gold" id="invSellAllBtn">Продать всё</button>
+      </div>
+    </div>
+    <div class="inv-summary" id="invSummary"></div>
+    <div class="inv-grid" id="invGrid"></div>
+  </section>
+</main>
+
+<footer>
+  <span>НОМЕРНОЙ · прогресс сохраняется локально · <span id="saveDot" style="color:var(--muted2)">●</span></span>
+</footer>
+
+</div>
+
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-card">
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:40px">▣</div>
+      <div style="font-family:'JetBrains Mono';font-weight:800;font-size:22px;margin-top:6px">НОМЕРНОЙ <span style="color:var(--muted);font-weight:500">/ магнат</span></div>
+    </div>
+    <div class="auth-tabs">
+      <button id="authTabLogin" class="active">Войти</button>
+      <button id="authTabReg">Регистрация</button>
+    </div>
+    <div id="authLogin"></div>
+    <div id="authReg" style="display:none">
+      <input class="name-input" id="regName" placeholder="Имя игрока" maxlength="16">
+      <input type="password" class="name-input" id="regPass" placeholder="Пароль (мин. 4 символа)">
+      <input type="password" class="name-input" id="regPass2" placeholder="Повтори пароль">
+      <button class="btn btn-primary" style="width:100%" id="regGo">Создать аккаунт и играть</button>
+    </div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+<div id="modalRoot"></div>
+
+<script src="js/db/db.regions.js"></script>
+<script src="js/db/db.rarities.js"></script>
+<script src="js/db/db.economy.js"></script>
+<script src="js/db/db.vehicles.js"></script>
+<script src="js/db/db.businesses.js"></script>
+<script src="js/db/db.properties.js"></script>
+<script src="js/db/db.prestige.js"></script>
+<script src="js/db/db.cases.js"></script>
+<script src="js/db/db.wheel.js"></script>
+<script src="js/core/utils.js"></script>
+<script src="js/core/sound.js"></script>
+<script src="js/core/save.js"></script>
+<script src="js/core/state.js"></script>
+<script src="js/ui/ui.common.js"></script>
+<script src="js/ui/ui.plates.js"></script>
+<script src="js/ui/svg.cars.js"></script>
+<script src="js/ui/ui.header.js"></script>
+<script src="js/game/plates.js"></script>
+<script src="js/game/inventory.js"></script>
+<script src="js/game/spin.js"></script>
+<script src="js/game/cases.js"></script>
+<script src="js/game/garage.js"></script>
+<script src="js/game/business.js"></script>
+<script src="js/game/properties.js"></script>
+<script src="js/game/prestige.js"></script>
+<script src="js/game/auth.js"></script>
+<script src="js/game/trades.js"></script>
+<script src="js/game/auctions.js"></script>
+<script src="js/game/wheel.js"></script>
+<script src="js/game/rating.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
